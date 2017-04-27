@@ -7,6 +7,9 @@ all: styleguide
 
 styleguide: styleguide.o
 	$(CC) $(CFLAGS) styleguide.o -o styleguide
+	
+styleguide.o :
+	$(CC) $(CFLAGS) styleguide.c -c styleguide.o
 
 .PHONY: clean
 clean:
