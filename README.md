@@ -39,5 +39,5 @@ int main(void){
 ```
 Ran with `-v` the output will be
 
-![example](https://raw.github.com/DylanCirimelli-Low/styleguide/blob/master/verbose.PNG)
+![example with verbose](https://cloud.githubusercontent.com/assets/20120525/25462841/a508f2c8-2aa6-11e7-8eb3-a38f9d364dcf.PNG)
 
