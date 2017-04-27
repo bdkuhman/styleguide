@@ -41,3 +41,7 @@ Ran with `-v` the output will be
 
 ![example with verbose](https://cloud.githubusercontent.com/assets/20120525/25462841/a508f2c8-2aa6-11e7-8eb3-a38f9d364dcf.PNG)
 
+
+## Known errors
+
+This will still parse whatever is inside strings and inline comments as if they were code; single-line comments are okay though. This was puked up in an hour or two so it isn't anything great, but it is doesn't cost anything to run. If I have time, i'll finish after midterms.
