@@ -37,10 +37,12 @@ char* keywords[] = {"#include", //0
 					"}//",		//15
 					"{//",		//16
 					"#define",	//17
-					"()"		//18
+					"()",		//18
+                    "//",        //19
+                    ","         //20
 					};
 
-const int keywordsSize = 19;
+const int keywordsSize = 21;
 char *trim(char *str){
 
     size_t len = 0;
@@ -138,6 +140,12 @@ char *errormsg(int keyword){
 		case 18:
 			toReturn = KCYN_W "Warning" KNRM ": If your function does not take any parameters, be sure to use void in the parenthesis.";
 			break;
+        case 19:
+			toReturn = "Add space between slashes and comment.";
+            break;
+        case 20:
+            toReturn = "Add a space after ','";
+            break;
 		default:
 			toReturn = "Undefined error";
 			break;
@@ -160,29 +168,54 @@ int search(char *fname) {
 	{
 		for(int i = 0; i < keywordsSize; i++)
 		{
-			if((strstr(temp, keywords[i])) != NULL)
+            char* index = strstr(temp,keywords[i]);
+			if(index != NULL)
 			{
-				if((temp[0] != '/' && temp[1] != '/'))	//if not a comment
+				if(temp[0] != '/' && temp[1] != '/' && i != 19)	// if not a comment
 				{
-					if(mode == VERBOSE)
-					{
-						printf(KRED "Error" KNRM " on line %d:\n", line_num);
-						trim(temp);
-						printf(KGRN "    %s\n" KNRM, temp);
-						printf("    %s\n\n", errormsg(i));
-					}
-					else
-					{
-						if(i != 2 && i != 4 && i != 5 && i != 6 && i != 14 && i != 18)
-						{
-							printf(KRED "Error" KNRM " on line %d:\n", line_num);
-							trim(temp);
-							printf(KGRN "    %s\n" KNRM, temp);
-							printf("    %s\n\n", errormsg(i));
-						}
-					}
+                    if (i != 20)
+                    {
+    					if(mode == VERBOSE)
+    					{
+    						printf(KRED "Error" KNRM " on line %d:\n", line_num);
+    						trim(temp);
+    						printf(KGRN "    %s\n" KNRM, temp);
+    						printf("    %s\n\n", errormsg(i));
+    					}
+    					else
+    					{
+    						if(i != 2 && i != 4 && i != 5 && i != 6 && i != 14 && i != 18)
+    						{
+    							printf(KRED "Error" KNRM " on line %d:\n", line_num);
+    							trim(temp);
+    							printf(KGRN "    %s\n" KNRM, temp);
+    							printf("    %s\n\n", errormsg(i));
+    						}
+    					}
+                    }
+                    if (i == 20 && temp[index-temp + 1] != ' ')
+                    {
+                            printf(KRED "Error" KNRM " on line %d:\n", line_num);
+    						trim(temp);
+    						printf(KGRN "    %s\n" KNRM, temp);
+	    					printf("    %s\n\n", errormsg(i));
+
+                    }
+
 				}
-			}
+                else
+                {
+                        if(temp[index - temp + 2]  != ' ')
+                        {
+                            printf(KRED "Error" KNRM " on line %d:\n", line_num);
+    						trim(temp);
+    						printf(KGRN "    %s\n" KNRM, temp);
+	    					printf("    %s\n\n", errormsg(i));
+                        }
+                    
+			    }
+                
+            }
 		}
 		line_num++;
 	}
