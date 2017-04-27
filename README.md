@@ -39,3 +39,5 @@ int main(void){
 ```
 Ran with `-v` the output will be
 
+![example](https://raw.github.com/DylanCirimelli-Low/styleguide/blob/master/verbose.PNG)
+
