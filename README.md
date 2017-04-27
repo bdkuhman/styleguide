@@ -7,10 +7,10 @@ This is in early development and definitely doesn't exhaustively check for every
 The expected input follows the form `./styleguide <opcode> <filepath>`
 
 `-v` : verbose
-  reports on all error and warnings. Warning *may* not be errors and are prone to give false positives, but hey, better safe than sorry, right?
+  reports on all errors and warnings. Warnings *may* not be errors and are prone to give false positives, but hey, better safe than sorry, right?
   
   `-s` : suppress warnings
-  reports on finding which are likely to be errors, but still may give false positives
+  reports on findings which are likely to be errors, but still may give false positives
   
 `filepath`  : accepts all filetypes but will give useless responses for non-ascii files
 
