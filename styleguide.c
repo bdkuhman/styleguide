@@ -22,31 +22,34 @@ char* verbose = "-v";
 int mode;
 char* filestring;
 
-//regex to prevent matching string literals:
- //   (?=([^"\\]*(\\.|"([^"\\]*\\.)*[^"\\]*"))*[^"]*$)
+//regex to prevent matching string literals: might not work right.
+ //   /(?=([^"\\]*(\\.|"([^"\\]*\\.)*[^"\\]*"))*[^"]*$)/
 char* sliteral = "(?=([^\"\\\\]*(\\\\.|\"([^\"\\\\]*\\\\.)*[^\"\\\\]*\"))*[^\"]*$)";
 
-char* keywords[] = {"#include", //0		(#\w)
-					"){", 		//1		((\)|\b)[^\S\n]*{)
-					"int ", 	//2
-					"include<", //3
-					"long ", 	//4
-					"short ", 	//5
+char* keywords[] = {"#include", //0		/(#\w)/
+					"){", 		//1		/((\)|\b)[^\S\n]*{)/
+					"int ", 	//2     /((\s|\()(int|float|double|char|short|long)\s)/
+					"include<", //3		((include|define)[<"])
+					"long ", 	//4		see 2
+					"short ", 	//5		see 2
 					"_",  		//6
 					") {", 		//7		see 1
 					"enum{", 	//8		see 1
 					"enum {", 	//9		see 1
 					"struct {", //10    see 1
-					";//",		//11	(\S\/(\/|\*)) 		also catches /*
-					"{\"",		//12
-					"\"}",		//13
-					"\n {",		//14
+					";//",		//11	/(\s?(\/(\/|\*))(\S)?)/ 		also catches /*
+					"{\"",		//12	/("[^\S\n]*}|[^\S\n]*{")/
+					"\"}",		//13	see 12
+					"\n {",		//14	see 12
 					"}//",		//15	see 11
 					"{//",		//16	see 11
-					"#define",	//17	see 0
-					"()",		//18
-                    "//",        //19
-                    ","         //20
+					"#define",	//17	see 0, 3
+					"()",		//18	/^.*\b\s*\((\s*)\)/   --matches empty parameter function declarations
+                    "//",        //19	see 11
+                    ","         //20	/(,\S)/
+
+								//21	(?<!(typedef[\s]+))(enum|struct) //should check for typedef but not all vesions support it.
+								//22
 					};
 
 const int keywordsSize = 21;
