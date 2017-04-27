@@ -125,8 +125,10 @@ char *errormsg(int keyword){
 			break;
 		case 14:
 			toReturn = KCYN_W "Warning" KNRM ": conditionals should be nested and brackets/text should be aligned (do you have extra whitespace?)";
+			break;
 		case 15:
 			toReturn = "Put a tab (or space) before inline comments";
+			break;
 		case 16:
 			toReturn = "Put a tab (or space) before inline comments";
 			break;
@@ -134,7 +136,7 @@ char *errormsg(int keyword){
 			toReturn = "Add a space between '#' and define";
 			break;
 		case 18:
-			toReturn = "If your function does not take any parameters, be sure to use void in the parenthesis.";
+			toReturn = KCYN_W "Warning" KNRM ": If your function does not take any parameters, be sure to use void in the parenthesis.";
 			break;
 		default:
 			toReturn = "Undefined error";
@@ -171,7 +173,7 @@ int search(char *fname) {
 					}
 					else
 					{
-						if(i != 2 && i != 4 && i != 5 && i != 6 && i != 14)
+						if(i != 2 && i != 4 && i != 5 && i != 6 && i != 14 && i != 18)
 						{
 							printf(KRED "Error" KNRM " on line %d:\n", line_num);
 							trim(temp);
