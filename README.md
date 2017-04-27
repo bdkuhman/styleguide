@@ -3,6 +3,7 @@ A CMPS12B styleguide checker.
 This is in early development and definitely doesn't exhaustively check for every error, but there is no harm in running this.
 
 ## Usage
+
 The expected input follows the form `./styleguide <opcode> <filepath>`
 
 `-v` : verbose
@@ -21,7 +22,7 @@ You can clone this repo with:
 
 Otherwise, you can download the `.zip` directly.
 
-##Example
+## Example
 Consider the following code
 ```
 #include <stdint.h>
