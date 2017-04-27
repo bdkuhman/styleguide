@@ -16,30 +16,31 @@ enum {SUPPRESS, VERBOSE};
 
 char* suppress = "-s";
 char* verbose = "-v";
-	
+
 int mode;
 char* filestring;
-char* keywords[] = {"#include", 
-					"){", 
-					"int ", 
-					"include<", 
-					"long ", 
-					"short ", 
-					"_",  
-					") {", 
-					"enum{", 
-					"enum {", 
-					"struct {", 
-					";//",
-					"{\"",
-					"\"}",
-					"\n {",
-					"}//",
-					"{//",
-					"#define"
+char* keywords[] = {"#include", //0
+					"){", 		//1
+					"int ", 	//2
+					"include<", //3
+					"long ", 	//4
+					"short ", 	//5
+					"_",  		//6
+					") {", 		//7
+					"enum{", 	//8
+					"enum {", 	//9
+					"struct {", //10
+					";//",		//11
+					"{\"",		//12
+					"\"}",		//13
+					"\n {",		//14
+					"}//",		//15
+					"{//",		//16
+					"#define",	//17
+					"()"		//18
 					};
-				
-const int keywordsSize = 18;
+
+const int keywordsSize = 19;
 char *trim(char *str){
 
     size_t len = 0;
@@ -57,7 +58,7 @@ char *trim(char *str){
     {
         while( isspace((unsigned char) *(--endp)) && endp != frontp ) {}
     }
-	
+
     if( str + len - 1 != endp )
             *(endp + 1) = '\0';
     else if( frontp != str &&  endp == frontp )
@@ -75,11 +76,11 @@ char *trim(char *str){
 }
 
 char *errormsg(int keyword){
-	
+
 	char* toReturn;
-	
+
 	switch(keyword){
-		
+
 		case 0:
 			toReturn = "Add a space between '#' and include";
 			break;
@@ -132,29 +133,32 @@ char *errormsg(int keyword){
 		case 17:
 			toReturn = "Add a space between '#' and define";
 			break;
+		case 18:
+			toReturn = "If your function does not take any parameters, be sure to use void in the parenthesis.";
+			break;
 		default:
 			toReturn = "Undefined error";
 			break;
 	}
-	
-	return toReturn;	
+
+	return toReturn;
 }
 
 int search(char *fname) {
 	FILE *fp;
 	int line_num = 1;
 	char temp[512];
-	
+
 	if((fp = fopen(fname, "r")) == NULL) {
 		perror(KRED "Error" KNRM ": Could not read from target file");
 		exit(1);
 	}
 
-	while(fgets(temp, 512, fp) != NULL) 
+	while(fgets(temp, 512, fp) != NULL)
 	{
 		for(int i = 0; i < keywordsSize; i++)
-		{ 
-			if((strstr(temp, keywords[i])) != NULL) 
+		{
+			if((strstr(temp, keywords[i])) != NULL)
 			{
 				if((temp[0] != '/' && temp[1] != '/'))	//if not a comment
 				{
@@ -172,7 +176,7 @@ int search(char *fname) {
 							printf(KRED "Error" KNRM " on line %d:\n", line_num);
 							trim(temp);
 							printf(KGRN "    %s\n" KNRM, temp);
-							printf("    %s\n\n", errormsg(i));	
+							printf("    %s\n\n", errormsg(i));
 						}
 					}
 				}
@@ -181,15 +185,15 @@ int search(char *fname) {
 		line_num++;
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
 	//Close the file if still open.
 	if(fp) {
 		fclose(fp);
@@ -199,17 +203,17 @@ int search(char *fname) {
 
 int main(int argc, char** argv)
 {
-	
+
 	if(argc == 3)
 	{
 		if(!(!strcmp(argv[1], verbose) || !strcmp(argv[1], suppress)))
 		{
 			printf("Usage:\n\t./styleguide <opcode> <filepath>\n\n\t-s suppresses all warnings (thing that only *might* be errors)\n\t-v prints all errors and warnings\n\n");
 			return 0;
-		}	
-		
-		filestring = argv[2]; 
-			
+		}
+
+		filestring = argv[2];
+
 		if(strcmp(argv[1], suppress) == 0)
 		{
 			mode = SUPPRESS;
@@ -222,15 +226,15 @@ int main(int argc, char** argv)
 		{
 			mode = VERBOSE;
 		}
-		
+
 	}
 	else
 	{
 		printf("Usage:\n\t./styleguide <opcode> <filepath>\n\n\t-s suppresses all warnings (thing that only *might* be errors)\n\t-v prints all errors and warnings\n\n");
 		return 0;
 	}
-	
+
 	search(filestring);
-	
+
 	return 0;
 }
