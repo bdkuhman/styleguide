@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <regex.h>
+
 #define KNRM  "\x1B[0m"
 #define KRED  "\x1B[31m"
 #define KGRN  "\x1B[32m"
@@ -19,24 +21,29 @@ char* verbose = "-v";
 
 int mode;
 char* filestring;
-char* keywords[] = {"#include", //0
-					"){", 		//1
+
+//regex to prevent matching string literals:
+ //   (?=([^"\\]*(\\.|"([^"\\]*\\.)*[^"\\]*"))*[^"]*$)
+char* sliteral = "(?=([^\"\\\\]*(\\\\.|\"([^\"\\\\]*\\\\.)*[^\"\\\\]*\"))*[^\"]*$)";
+
+char* keywords[] = {"#include", //0		(#\w)
+					"){", 		//1		((\)|\b)[^\S\n]*{)
 					"int ", 	//2
 					"include<", //3
 					"long ", 	//4
 					"short ", 	//5
 					"_",  		//6
-					") {", 		//7
-					"enum{", 	//8
-					"enum {", 	//9
-					"struct {", //10
-					";//",		//11
+					") {", 		//7		see 1
+					"enum{", 	//8		see 1
+					"enum {", 	//9		see 1
+					"struct {", //10    see 1
+					";//",		//11	(\S\/(\/|\*)) 		also catches /*
 					"{\"",		//12
 					"\"}",		//13
 					"\n {",		//14
-					"}//",		//15
-					"{//",		//16
-					"#define",	//17
+					"}//",		//15	see 11
+					"{//",		//16	see 11
+					"#define",	//17	see 0
 					"()",		//18
                     "//",        //19
                     ","         //20
@@ -212,9 +219,9 @@ int search(char *fname) {
     						printf(KGRN "    %s\n" KNRM, temp);
 	    					printf("    %s\n\n", errormsg(i));
                         }
-                    
+
 			    }
-                
+
             }
 		}
 		line_num++;
